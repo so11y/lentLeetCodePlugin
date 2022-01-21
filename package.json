@@ -29,5 +29,8 @@
         "dev": "cross-env LENT_DEV=dev rollup --config --watch",
         "build": "rollup --config"
     },
-    "license": "ISC"
+    "license": "ISC",
+    "dependencies": {
+        "@babel/core": "^7.16.10"
+    }
 }

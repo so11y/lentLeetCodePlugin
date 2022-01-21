@@ -1,6 +1,6 @@
 {
     "name": "lentleetcodeplugin",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "",
     "main": "dist/index.js",
     "devDependencies": {
@@ -25,6 +25,9 @@
         "name": "zrrz",
         "email": "247076126@qq.com"
     },
+    "files": [
+        "dist"
+    ],
     "scripts": {
         "dev": "cross-env LENT_DEV=dev rollup --config --watch",
         "build": "rollup --config"

@@ -40,13 +40,20 @@ const genCode = ({ types }) => {
 	return {
 		visitor: {
 			ObjectExpression(path) {
+				let childs = path.node.properties.map((v) => v.value);
+
+				const f = childs.filter((v) => !types.isNullLiteral(v));
+				if (f.length === 1) {
+					childs = childs.slice(0, 1);
+				} else if (f.length === 2) {
+					const rightNull = types.isNullLiteral(childs[2]);
+					if (rightNull) {
+						childs = childs.slice(0, 2);
+					}
+				}
+
 				path.replaceWith(
-					types.newExpression(
-						types.identifier('TreeNode'),
-						path.node.properties
-							.map((v) => v.value)
-							.filter((v) => !types.isNullLiteral(v))
-					)
+					types.newExpression(types.identifier('TreeNode'), childs)
 				);
 			}
 		}

@@ -1,13 +1,17 @@
 import { LentHttpInstance } from 'lent/dist/types';
 import { babelMapToJSCode } from './converTreeNodeCode';
-import path from 'path';
-import fs from 'fs/promises';
+import { babelMapToListNodeCode } from './coverListNodeCode';
+
+interface IRequestType {
+	type: string;
+	demo: Array<number>; //Record<string, any>;
+}
 
 const handleUrl = (s: string) => {
 	return s.split('?').slice(1).join('');
 };
 
-const getUrlData = (s: string) => {
+const getUrlData = (s: string): IRequestType => {
 	const v = new URLSearchParams(handleUrl(s));
 	return {
 		type: v.get('type'),
@@ -15,32 +19,29 @@ const getUrlData = (s: string) => {
 	};
 };
 
-export const lentLeetCodePlugin = (
-	i: LentHttpInstance,
-	fileName = 'index.ts'
-) => {
+const switchType = (v: IRequestType) => {
+	switch (v.type) {
+		case 'tree':
+			return babelMapToJSCode(v.demo);
+		case 'listnode':
+			return babelMapToListNodeCode(v.demo);
+		default:
+			break;
+	}
+};
+
+export const lentLeetCodePlugin = (i: LentHttpInstance) => {
 	i.router.addRouter({
 		method: 'get',
 		path: '/leetcode',
 		handler(req, res) {
-			const v = getUrlData(req.url);
-			const p = path.join(process.cwd(), i.config.root, fileName);
-			res.setHeader('Content-Type', 'application/json;charset=utf-8');
-			switch (v.type) {
-				case 'tree':
-					fs.readFile(p).then((f) => {
-						fs.writeFile(
-							p,
-							`${babelMapToJSCode(v.demo)}
-                             ${f}
-                                `
-						);
-					});
-					return `{code:200}`;
-				default:
-					break;
+			try {
+				const v = getUrlData(req.url);
+				res.setHeader('Content-Type', 'application/json;charset=utf-8');
+				return switchType(v);
+			} catch (e) {
+				return `{code: 500,msg: ${e}}`;
 			}
-			return '';
 		}
 	});
 };

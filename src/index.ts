@@ -1,6 +1,9 @@
 import { LentHttpInstance } from 'lent/dist/types';
-import { babelMapToJSCode } from './converTreeNodeCode';
-import { babelMapToListNodeCode } from './coverListNodeCode';
+import { babelMapToJSCode, genArraytoTreeNode } from './converTreeNodeCode';
+import {
+	babelMapToListNodeCode,
+	genArraytoListNode
+} from './coverListNodeCode';
 
 interface IRequestType {
 	type: string;
@@ -45,3 +48,5 @@ export const lentLeetCodePlugin = (i: LentHttpInstance) => {
 		}
 	});
 };
+
+export { genArraytoTreeNode, genArraytoListNode };

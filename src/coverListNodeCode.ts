@@ -1,7 +1,7 @@
 import { ListNode } from './share';
 const { transformSync } = require('@babel/core');
 
-const genArraytoListNode = (v: Array<number>) => {
+export const genArraytoListNode = (v: Array<number>) => {
 	const walk = () => {
 		if (!v.length) return null;
 		return new ListNode(v.shift(), walk());

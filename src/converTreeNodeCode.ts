@@ -1,7 +1,7 @@
 import { TreeNode } from './share';
 const { transformSync } = require('@babel/core');
 
-const genArraytoTreeNode = (v: Array<number>) => {
+export const genArraytoTreeNode = (v: Array<number>) => {
 	const matrixTreeNode = [[v.shift()]];
 
 	while (v.length) {

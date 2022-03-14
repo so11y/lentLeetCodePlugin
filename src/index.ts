@@ -11,7 +11,7 @@ const handleUrl = (s: string) => {
 	return s.split('?').slice(1).join('');
 };
 
-const getUrlData = (s: string): IRequestType => {
+export const getUrlData = (s: string): IRequestType => {
 	const v = new URLSearchParams(handleUrl(s));
 	return {
 		type: v.get('type'),

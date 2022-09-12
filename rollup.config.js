@@ -26,9 +26,9 @@ const replaces = () => {
 	});
 };
 
-export default [
-	{
-		input: './src/index.ts',
+const defineBuild = (options) => {
+	return {
+		input: options.input,
 		plugins: [
 			typeScriptPlugin({
 				check: false,
@@ -36,18 +36,32 @@ export default [
 				tsconfigOverride: {
 					sourcemap: isDev
 				}
-			}),
-			replaces()
+			})
+			// replaces()
 		],
 		watch: {
 			include: 'src/**',
 			exclude: 'node_modules/**'
 		},
+		// external: Object.keys(pkg.dependencies),
 		output: {
 			banner,
-			sourcemap: isDev,
-			file: './dist/index.js',
-			format: 'cjs'
+			sourcemap: 'inline',
+			file: options.file,
+			format: options.format
 		}
-	}
+	};
+};
+
+export default [
+	defineBuild({
+		input: './src/index.ts',
+		file: './dist/index.js',
+		format: 'esm'
+	}),
+	defineBuild({
+		input: './src/share.ts',
+		file: './dist/share.js',
+		format: 'esm'
+	})
 ];

@@ -57,7 +57,7 @@ export default [
 	defineBuild({
 		input: './src/index.ts',
 		file: './dist/index.js',
-		format: 'esm'
+		format: 'cjs'
 	}),
 	defineBuild({
 		input: './src/share.ts',

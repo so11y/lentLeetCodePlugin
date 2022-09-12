@@ -26,7 +26,10 @@ const genCode = ({ types }) => {
 	};
 };
 
-export const babelMapToListNodeCode = (sourceArray: Array<number>) => {
+export const babelMapToListNodeCode = (
+	sourceArray: Array<number>,
+	index: string
+) => {
 	let source = '';
 	try {
 		const node = genArrayToListNode(sourceArray);
@@ -34,7 +37,7 @@ export const babelMapToListNodeCode = (sourceArray: Array<number>) => {
 	} catch {
 		throw new Error('convert ListNode Error');
 	}
-	return transformSync(`const demo = ${source}`, {
+	return transformSync(`const demo${index} = ${source}`, {
 		plugins: [genCode]
 	}).code;
 };

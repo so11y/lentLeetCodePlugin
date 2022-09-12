@@ -58,7 +58,7 @@ const genCode = ({ types }) => {
 	};
 };
 
-export const babelMapToJSCode = (sourceArray: Array<number>) => {
+export const babelMapToJSCode = (sourceArray: Array<number>, index: string) => {
 	let source = '';
 	try {
 		const node = genArrayToTreeNode(sourceArray);
@@ -66,7 +66,7 @@ export const babelMapToJSCode = (sourceArray: Array<number>) => {
 	} catch {
 		throw new Error('convert TreeNode Error');
 	}
-	return transformSync(`const demo = ${source}`, {
+	return transformSync(`const demo${index} = ${source}`, {
 		plugins: [genCode]
 	}).code;
 };

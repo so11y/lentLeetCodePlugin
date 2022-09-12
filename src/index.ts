@@ -9,14 +9,15 @@ export * from './share';
 interface IRequestType {
 	type: string;
 	demo: Array<number>;
+	index: string;
 }
 
 const switchType = (v: IRequestType) => {
 	switch (v.type) {
 		case 'tree':
-			return babelMapToJSCode(v.demo);
+			return babelMapToJSCode(v.demo, v.index);
 		case 'listnode':
-			return babelMapToListNodeCode(v.demo);
+			return babelMapToListNodeCode(v.demo, v.index);
 		default:
 			break;
 	}
@@ -37,7 +38,8 @@ export const lentLeetCode: MiddlewarePlugin = () => {
 			try {
 				const source = switchType({
 					type: params.get('type'),
-					demo: JSON.parse(params.get('demo'))
+					demo: JSON.parse(params.get('demo')),
+					index: params.get('index') || ''
 				});
 				res.end(source);
 			} catch (error) {

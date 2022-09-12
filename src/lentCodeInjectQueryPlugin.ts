@@ -40,12 +40,13 @@ export const injectQueryPlugin = (
 						(v) => v.type === 'Line' && v.value.includes('__lent__inject__')
 					);
 					const needQuery = injectComments
-						.map((v) => {
+						.map((v, i) => {
 							const [isInject, query = '', done] = v.value
 								.split(' ')
 								.filter(Boolean);
 							if (isInject !== '__lent__inject__') return;
 							return {
+								index: i,
 								...v,
 								query,
 								done: done === 'done'
@@ -58,7 +59,7 @@ export const injectQueryPlugin = (
 						const current = needQuery[index];
 						const data = (
 							await axios.get(
-								`http://${defineOptions.host}:${defineOptions.port}/${current.query}`
+								`http://${defineOptions.host}:${defineOptions.port}/${current.query}&index=${current.index}}`
 							)
 						).data;
 						s.appendRight(current.end, ' done');

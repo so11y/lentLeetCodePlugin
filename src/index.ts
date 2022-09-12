@@ -3,6 +3,7 @@ import { MiddlewarePlugin } from 'lent';
 import { parse } from 'url';
 import { babelMapToJSCode } from './converTreeNodeCode';
 import { babelMapToListNodeCode } from './coverListNodeCode';
+export * from './leetCodePlugin';
 export * from './share';
 interface IRequestType {
 	type: string;

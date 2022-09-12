@@ -1,7 +1,7 @@
 import { ListNode } from './share';
 const { transformSync } = require('@babel/core');
 
-export const genArraytoListNode = (v: Array<number>) => {
+export const genArrayToListNode = (v: Array<number>) => {
 	const walk = () => {
 		if (!v.length) return null;
 		return new ListNode(v.shift(), walk());
@@ -13,13 +13,13 @@ const genCode = ({ types }) => {
 	return {
 		visitor: {
 			ObjectExpression(path) {
-				let childs = path.node.properties.map((v) => v.value);
-				const f = childs.filter((v) => !types.isNullLiteral(v));
+				let child = path.node.properties.map((v) => v.value);
+				const f = child.filter((v) => !types.isNullLiteral(v));
 				if (f.length === 1) {
-					childs = childs.slice(0, 1);
+					child = child.slice(0, 1);
 				}
 				path.replaceWith(
-					types.newExpression(types.identifier('ListNode'), childs)
+					types.newExpression(types.identifier('ListNode'), child)
 				);
 			}
 		}
@@ -29,10 +29,10 @@ const genCode = ({ types }) => {
 export const babelMapToListNodeCode = (sourceArray: Array<number>) => {
 	let source = '';
 	try {
-		const node = genArraytoListNode(sourceArray);
+		const node = genArrayToListNode(sourceArray);
 		source = JSON.stringify(node);
 	} catch {
-		throw new Error('conver ListNode Error');
+		throw new Error('convert ListNode Error');
 	}
 	return transformSync(`const demo = ${source}`, {
 		plugins: [genCode]

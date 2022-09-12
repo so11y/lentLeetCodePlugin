@@ -7,11 +7,12 @@
 // 		lentLeetCodePlugin(i);
 // 	}
 // });
-import { lentLeetCode } from './dist';
+import { lentLeetCode, injectQueryPlugin } from './dist';
 
 import { defineConfig } from 'lent';
 
 export default defineConfig({
 	port: 3099,
+	plugins: [injectQueryPlugin()],
 	middleware: [lentLeetCode]
 });

@@ -4,6 +4,7 @@ import { parse } from 'url';
 import { babelMapToJSCode } from './converTreeNodeCode';
 import { babelMapToListNodeCode } from './coverListNodeCode';
 export * from './leetCodePlugin';
+export * from './lentCodeInjectQueryPlugin';
 export * from './share';
 interface IRequestType {
 	type: string;
@@ -47,5 +48,3 @@ export const lentLeetCode: MiddlewarePlugin = () => {
 		next();
 	};
 };
-
-// export { genArraytoTreeNode, genArraytoListNode };

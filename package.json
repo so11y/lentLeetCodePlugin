@@ -1,6 +1,6 @@
 {
 	"name": "@lent/leet-code",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"description": "",
 	"main": "dist/index.js",
 	"devDependencies": {
@@ -15,7 +15,7 @@
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-import": "^2.25.2",
 		"eslint-plugin-prettier": "^4.0.0",
-		"lent": "^2.0.6-beta",
+		"lent": "^2.0.8-beta",
 		"prettier": "^2.4.1",
 		"rollup": "^2.59.0",
 		"rollup-plugin-typescript2": "^0.30.0",
@@ -35,7 +35,10 @@
 	},
 	"license": "ISC",
 	"dependencies": {
-		"@babel/core": "^7.16.10"
+		"@babel/core": "^7.16.10",
+		"@rollup/pluginutils": "^4.2.1",
+		"axios": "^0.27.2",
+		"magic-string": "^0.26.3"
 	},
 	"publishConfig": {
 		"access": "public"

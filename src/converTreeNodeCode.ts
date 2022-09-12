@@ -1,7 +1,7 @@
 import { TreeNode } from './share';
 const { transformSync } = require('@babel/core');
 
-export const genArraytoTreeNode = (v: Array<number>) => {
+export const genArrayToTreeNode = (v: Array<number>) => {
 	const matrixTreeNode = [[v.shift()]];
 
 	while (v.length) {
@@ -40,20 +40,18 @@ const genCode = ({ types }) => {
 	return {
 		visitor: {
 			ObjectExpression(path) {
-				let childs = path.node.properties.map((v) => v.value);
-
-				const f = childs.filter((v) => !types.isNullLiteral(v));
+				let child = path.node.properties.map((v) => v.value);
+				const f = child.filter((v) => !types.isNullLiteral(v));
 				if (f.length === 1) {
-					childs = childs.slice(0, 1);
+					child = child.slice(0, 1);
 				} else if (f.length === 2) {
-					const rightNull = types.isNullLiteral(childs[2]);
+					const rightNull = types.isNullLiteral(child[2]);
 					if (rightNull) {
-						childs = childs.slice(0, 2);
+						child = child.slice(0, 2);
 					}
 				}
-
 				path.replaceWith(
-					types.newExpression(types.identifier('TreeNode'), childs)
+					types.newExpression(types.identifier('TreeNode'), child)
 				);
 			}
 		}
@@ -63,10 +61,10 @@ const genCode = ({ types }) => {
 export const babelMapToJSCode = (sourceArray: Array<number>) => {
 	let source = '';
 	try {
-		const node = genArraytoTreeNode(sourceArray);
+		const node = genArrayToTreeNode(sourceArray);
 		source = JSON.stringify(node);
 	} catch {
-		throw new Error('conver TreeNode Error');
+		throw new Error('convert TreeNode Error');
 	}
 	return transformSync(`const demo = ${source}`, {
 		plugins: [genCode]

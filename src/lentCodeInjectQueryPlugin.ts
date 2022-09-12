@@ -57,17 +57,14 @@ export const injectQueryPlugin = (
 					const s = new MagicString(code);
 					for (let index = 0; index < needQuery.length; index++) {
 						const current = needQuery[index];
+						const url = `http://${defineOptions.host}:${defineOptions.port}/${current.query}&index=${current.index}`;
 						try {
-							const data = (
-								await axios.get(
-									`http://${defineOptions.host}:${defineOptions.port}/${current.query}&index=${current.index}`
-								)
-							).data;
+							const data = (await axios.get(url)).data;
 							s.appendRight(current.end, ' done');
 							s.appendRight(current.end + 1, data + '\n');
 							writeFileSync(id, s.toString());
 						} catch (error) {
-							console.warn(error.message);
+							this.warn(`请求参数错误! url:==> ${url}`);
 						}
 					}
 				}

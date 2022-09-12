@@ -1,5 +1,6 @@
 import type { Plugin } from 'lent';
 import { readFileSync } from 'fs';
+import { resolve } from 'path';
 
 export const injectLeetCodePlugin = (): Plugin => {
 	return {
@@ -12,7 +13,7 @@ export const injectLeetCodePlugin = (): Plugin => {
 		},
 		load(id) {
 			if (id === '/injectLeetCode')
-				return readFileSync('./dist/share.js').toString();
+				return readFileSync(resolve(__dirname, './share.js')).toString();
 		}
 	};
 };

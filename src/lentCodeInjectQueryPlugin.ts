@@ -41,14 +41,17 @@ export const injectQueryPlugin = (
 					);
 					const needQuery = injectComments
 						.map((v) => {
-							const [, query = '', done] = v.value.split(' ').filter(Boolean);
+							const [isInject, query = '', done] = v.value
+								.split(' ')
+								.filter(Boolean);
+							if (isInject !== '__lent__inject__') return;
 							return {
 								...v,
 								query,
 								done: done === 'done'
 							};
 						})
-						.filter((v) => v.query && !v.done);
+						.filter((v) => v && v.query && !v.done);
 
 					const s = new MagicString(code);
 					for (let index = 0; index < needQuery.length; index++) {

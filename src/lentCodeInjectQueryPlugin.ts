@@ -57,14 +57,18 @@ export const injectQueryPlugin = (
 					const s = new MagicString(code);
 					for (let index = 0; index < needQuery.length; index++) {
 						const current = needQuery[index];
-						const data = (
-							await axios.get(
-								`http://${defineOptions.host}:${defineOptions.port}/${current.query}&index=${current.index}}`
-							)
-						).data;
-						s.appendRight(current.end, ' done');
-						s.appendRight(current.end + 1, data + '\n');
-						writeFileSync(id, s.toString());
+						try {
+							const data = (
+								await axios.get(
+									`http://${defineOptions.host}:${defineOptions.port}/${current.query}&index=${current.index}`
+								)
+							).data;
+							s.appendRight(current.end, ' done');
+							s.appendRight(current.end + 1, data + '\n');
+							writeFileSync(id, s.toString());
+						} catch (error) {
+							console.warn(error.message);
+						}
 					}
 				}
 			}

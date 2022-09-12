@@ -1,26 +1,13 @@
-import { LentHttpInstance } from 'lent/dist/types';
-import { babelMapToJSCode, genArraytoTreeNode } from './converTreeNodeCode';
-import {
-	babelMapToListNodeCode,
-	genArraytoListNode
-} from './coverListNodeCode';
-
+import { ServerResponse } from 'http';
+import { MiddlewarePlugin } from 'lent';
+import { parse } from 'url';
+import { babelMapToJSCode } from './converTreeNodeCode';
+import { babelMapToListNodeCode } from './coverListNodeCode';
+export * from './share';
 interface IRequestType {
 	type: string;
-	demo: Array<number>; //Record<string, any>;
+	demo: Array<number>;
 }
-
-const handleUrl = (s: string) => {
-	return s.split('?').slice(1).join('');
-};
-
-export const getUrlData = (s: string): IRequestType => {
-	const v = new URLSearchParams(handleUrl(s));
-	return {
-		type: v.get('type'),
-		demo: JSON.parse(v.get('demo'))
-	};
-};
 
 const switchType = (v: IRequestType) => {
 	switch (v.type) {
@@ -32,21 +19,32 @@ const switchType = (v: IRequestType) => {
 			break;
 	}
 };
-
-export const lentLeetCodePlugin = (i: LentHttpInstance) => {
-	i.router.addRouter({
-		method: 'get',
-		path: '/leetcode',
-		handler(req, res) {
-			try {
-				const v = getUrlData(req.url);
-				res.setHeader('Content-Type', 'application/json;charset=utf-8');
-				return switchType(v);
-			} catch (e) {
-				return `{code: 500,msg: ${e}}`;
-			}
-		}
-	});
+const sendError = (res: ServerResponse, error: string) => {
+	res.statusCode = 500;
+	res.end(error);
 };
 
-export { genArraytoTreeNode, genArraytoListNode };
+export const lentLeetCode: MiddlewarePlugin = () => {
+	return (req, res, next) => {
+		if (req.url.startsWith('/leetcode')) {
+			const { query } = parse(req.url);
+			const params = new URLSearchParams(query);
+			if (!params.get('type') || !params.get('demo')) {
+				return sendError(res, 'type or demo null');
+			}
+			try {
+				const source = switchType({
+					type: params.get('type'),
+					demo: JSON.parse(params.get('demo'))
+				});
+				res.end(source);
+			} catch (error) {
+				sendError(res, error.message);
+			}
+			return;
+		}
+		next();
+	};
+};
+
+// export { genArraytoTreeNode, genArraytoListNode };

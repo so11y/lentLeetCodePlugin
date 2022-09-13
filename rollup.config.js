@@ -28,7 +28,7 @@ const defineBuild = (options) => {
 		},
 		output: {
 			banner,
-			sourcemap: 'inline',
+			sourcemap: isDev,
 			file: options.file,
 			format: options.format
 		}

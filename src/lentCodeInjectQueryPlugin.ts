@@ -68,6 +68,7 @@ export const injectQueryPlugin = (
 						}
 					}
 				}
+				return `import.meta.hot.accept(()=>{});${code}`;
 			}
 		}
 	};

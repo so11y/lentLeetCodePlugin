@@ -5,6 +5,7 @@ import MagicString from 'magic-string';
 import { writeFileSync } from 'fs';
 
 interface LentInjectQueryOptions {
+	url: string;
 	host: string;
 	port: number;
 	include: string;
@@ -16,11 +17,18 @@ export const injectQueryPlugin = (
 	let defineOptions: LentInjectQueryOptions;
 	let filter;
 
+	const getUrl = (urlQuery: string) => {
+		if (defineOptions.url) {
+			return `${defineOptions.url}/${urlQuery}`;
+		}
+		return `http://${defineOptions.host}:${defineOptions.port}/${urlQuery}`;
+	};
 	return {
 		name: 'lent:injectQueryPlugin',
 		enforce: 'pre',
 		configureServer(lentInstance) {
 			defineOptions = {
+				url: '',
 				host: 'localhost',
 				port: lentInstance.config.port,
 				include: './main.ts'
@@ -58,7 +66,7 @@ export const injectQueryPlugin = (
 					const s = new MagicString(code);
 					for (let index = 0; index < needQuery.length; index++) {
 						const current = needQuery[index];
-						const url = `http://${defineOptions.host}:${defineOptions.port}/${current.query}&index=${current.index}`;
+						const url = getUrl(`${current.query}&index=${current.index}`);
 						try {
 							const data = (await axios.get(url)).data;
 							s.appendRight(current.end, ' done');

@@ -3,6 +3,7 @@ import { createFilter } from '@rollup/pluginutils';
 import axios from 'axios';
 import MagicString from 'magic-string';
 import { writeFileSync } from 'fs';
+const { parse } = require('@babel/core');
 
 interface LentInjectQueryOptions {
 	url: string;
@@ -40,13 +41,13 @@ export const injectQueryPlugin = (
 		},
 		async transform(code, id) {
 			if (filter(id)) {
-				const comments = [];
-				this.parse(code, {
-					onComment: comments
+				const { comments = [] } = parse(code, {
+					presets: [['babel-preset-typescript']]
 				});
-				if (comments.length) {
+				if (comments && comments.length) {
 					const injectComments = comments.filter(
-						(v) => v.type === 'Line' && v.value.includes('__lent__inject__')
+						(v) =>
+							v.type === 'CommentLine' && v.value.includes('__lent__inject__')
 					);
 					const needQuery = injectComments
 						.map((v, i) => {

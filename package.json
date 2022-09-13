@@ -31,7 +31,7 @@
 	],
 	"scripts": {
 		"dev": "cross-env LENT_DEV=dev rollup --config --watch",
-		"build": "rollup --config"
+		"build": "cross-env LENT_DEV=prod rollup --config"
 	},
 	"license": "ISC",
 	"dependencies": {

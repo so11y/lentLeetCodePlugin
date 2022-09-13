@@ -18,6 +18,7 @@ export const injectQueryPlugin = (
 
 	return {
 		name: 'lent:injectQueryPlugin',
+		enforce: 'pre',
 		configureServer(lentInstance) {
 			defineOptions = {
 				host: 'localhost',
